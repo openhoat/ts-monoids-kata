@@ -5,6 +5,11 @@ import { Any } from '../lib/monoids/any.ts'
 import { Product } from '../lib/monoids/product.ts'
 import { Max } from '../lib/monoids/max.ts'
 import { Min } from '../lib/monoids/min.ts'
+import {
+  Average,
+  AverageValue,
+  toAverageValue,
+} from '../lib/monoids/average.ts'
 
 describe('Monoid tests', () => {
   describe('Monoid', () => {
@@ -119,6 +124,34 @@ describe('Monoid tests', () => {
         expectedResult: true,
       }]
       testCases.forEach(doTestCase)
+    })
+    describe('Average', () => {
+      type TestCase = {
+        monoid: Monoid<AverageValue>
+        foldable: number[]
+        expectedResult: number
+      }
+      const testCases: TestCase[] = [{
+        monoid: Average,
+        foldable: [5, 13, 15],
+        expectedResult: 11,
+      }, {
+        monoid: Average,
+        foldable: [5, 4, 19, 16, 9, 4],
+        expectedResult: 9.5,
+      }]
+      testCases.forEach(({ monoid, foldable, expectedResult }) => {
+        it(`should return ${expectedResult} given ${JSON.stringify(foldable, null, 0)}`, () => {
+          // When
+          const resut = fold(foldable.map(toAverageValue), monoid)
+          // Then
+          if (resut.length === 0) {
+            expect(resut.sum).toEqual(expectedResult)
+          } else {
+            expect(resut.sum / resut.length).toEqual(expectedResult)
+          }
+        })
+      })
     })
   })
   describe('foldMap', () => {
