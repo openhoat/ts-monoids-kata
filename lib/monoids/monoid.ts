@@ -10,3 +10,9 @@ export interface Monoid<T = any> extends SemiGroup<T> {
 
 export const fold = <T>(foldable: T[], monoid: Monoid<T>): T =>
   foldable.reduce(monoid.concat, monoid.empty())
+
+export const foldMap = <T, M>(
+  mapper: (t: T) => M,
+  monoid: Monoid<M>,
+  foldable: T[],
+): M => fold(foldable.map(mapper), monoid)
