@@ -1,4 +1,4 @@
-import { fold, Monoid } from '../lib/monoids/monoid.ts'
+import { fold, foldMap, Monoid } from '../lib/monoids/monoid.ts'
 import { describe, expect, it, run } from '../deps/test/x/tincan.ts'
 import { Sum } from '../lib/monoids/sum.ts'
 import { Any } from '../lib/monoids/any.ts'
@@ -125,6 +125,11 @@ describe('Monoid tests', () => {
     describe('isWinnerTicket', () => {
       type TicketDigit = 1 | 2 | 3 | 4 | 5
       type Ticket = TicketDigit[]
+      const getTicketSum = (ticket: Ticket): number => fold(ticket, Sum)
+      const isWinnerTicket = (ticket: Ticket): boolean =>
+        getTicketSum(ticket) === 39
+      const isWinner = (tickets: Ticket[]): boolean =>
+        foldMap(isWinnerTicket, Any, tickets)
       type TestCase = {
         tickets: Ticket[]
         expectedResult: boolean
