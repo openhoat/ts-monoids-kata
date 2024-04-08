@@ -1,6 +1,10 @@
 import { fold, Monoid } from '../lib/monoids/monoid.ts'
 import { describe, expect, it, run } from '../deps/test/x/tincan.ts'
 import { Sum } from '../lib/monoids/sum.ts'
+import { Any } from '../lib/monoids/any.ts'
+import { Product } from '../lib/monoids/product.ts'
+import { Max } from '../lib/monoids/max.ts'
+import { Min } from '../lib/monoids/min.ts'
 
 describe('Monoid tests', () => {
   describe('Monoid', () => {
@@ -14,6 +18,10 @@ describe('Monoid tests', () => {
         }
         const testCases: TestCase[] = [
           { description: 'Sum', monoid: Sum, value: 3 },
+          { description: 'Any', monoid: Any, value: true },
+          { description: 'Product', monoid: Product, value: 7 },
+          { description: 'Max', monoid: Max, value: 6 },
+          { description: 'Min', monoid: Min, value: 5 },
         ]
         testCases.forEach(({ description, monoid, value }) => {
           describe(description, () => {
@@ -35,6 +43,10 @@ describe('Monoid tests', () => {
         }
         const testCases: TestCase[] = [
           { description: 'Sum', monoid: Sum, values: [3, 4, 5] },
+          { description: 'Any', monoid: Any, values: [true, false, true] },
+          { description: 'Product', monoid: Product, values: [7, 8, 9] },
+          { description: 'Max', monoid: Max, values: [6, 7, 8] },
+          { description: 'Min', monoid: Min, values: [5, 6, 7] },
         ]
         testCases.forEach(({ description, monoid, values }) => {
           describe(description, () => {
@@ -85,6 +97,26 @@ describe('Monoid tests', () => {
         monoid: Sum,
         foldable: [1, 12, 3],
         expectedResult: 16,
+      }]
+      testCases.forEach(doTestCase)
+    })
+    describe('Any', () => {
+      const testCases: TestCase<boolean>[] = [{
+        monoid: Any,
+        foldable: [Any.empty()],
+        expectedResult: Any.empty(),
+      }, {
+        monoid: Any,
+        foldable: [true, Any.empty()],
+        expectedResult: true,
+      }, {
+        monoid: Any,
+        foldable: [false, Any.empty()],
+        expectedResult: false,
+      }, {
+        monoid: Any,
+        foldable: [true, false, true],
+        expectedResult: true,
       }]
       testCases.forEach(doTestCase)
     })
