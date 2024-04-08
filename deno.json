@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/denoland/deno/main/cli/schemas/config-file.v1.json",
+  "fmt": {
+    "semiColons": false,
+    "singleQuote": true
+  },
+  "tasks": {
+    "install": "deno install --root .deno -fqAn vr https://deno.land/x/velociraptor@1.5.0/cli.ts && .deno/bin/vr install"
+  }
+}
