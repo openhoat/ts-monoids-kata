@@ -7,3 +7,6 @@ export interface SemiGroup<T = any> {
 export interface Monoid<T = any> extends SemiGroup<T> {
   empty: () => T
 }
+
+export const fold = <T>(foldable: T[], monoid: Monoid<T>): T =>
+  foldable.reduce(monoid.concat, monoid.empty())
