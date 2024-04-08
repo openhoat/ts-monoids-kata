@@ -1,0 +1,38 @@
+scripts:
+  check:
+    desc: Check sources types.
+    cmd: deno check test/monoid.test.ts
+  clean:
+    desc: Clean the dist folder.
+    cmd: .deno/bin/fs_cli rm dist
+  "clean:install":
+    desc: Clean the local deno install folder.
+    cmd: .deno/bin/fs_cli rm .deno/bin
+  "format":
+    desc: Check for project sources format.
+    cmd: deno fmt --check
+  "format:fix":
+    desc: Format the project sources.
+    cmd: deno fmt
+  install:
+    desc: Install all the tools used in the project.
+    cmd:
+      - deno install --root .deno --allow-read --allow-write --allow-env --allow-run -qfn fs_cli https://deno.land/x/fs_cli@v1.0.0/cli.ts
+  lint:
+    desc: Lint the project sources.
+    cmd: deno lint
+  "lint:watch":
+    desc: Lint the project sources in watch mode.
+    cmd: deno lint
+    watch: true
+  test:
+    desc: Run the tests.
+    cmd: deno test ./test
+  validate:
+    desc: Validate the project.
+    cmd:
+      - .deno/bin/vr clean
+      - .deno/bin/vr format
+      - .deno/bin/vr check
+      - .deno/bin/vr lint
+      - .deno/bin/vr test
