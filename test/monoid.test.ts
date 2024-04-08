@@ -1,4 +1,4 @@
-import { Monoid } from '../lib/monoids/monoid.ts'
+import { fold, Monoid } from '../lib/monoids/monoid.ts'
 import { describe, expect, it, run } from '../deps/test/x/tincan.ts'
 import { Sum } from '../lib/monoids/sum.ts'
 
@@ -50,6 +50,43 @@ describe('Monoid tests', () => {
           })
         })
       })
+    })
+  })
+  describe('fold', () => {
+    type TestCase<T> = {
+      monoid: Monoid<T>
+      foldable: T[]
+      expectedResult: T
+    }
+    const doTestCase = <T>(
+      { monoid, foldable, expectedResult }: TestCase<T>,
+    ) => {
+      it(`should return ${expectedResult} given ${JSON.stringify(foldable, null, 0)}`, () => {
+        // When
+        const resut = fold(foldable, monoid)
+        // Then
+        expect(resut).toEqual(expectedResult)
+      })
+    }
+    describe('Sum', () => {
+      const testCases: TestCase<number>[] = [{
+        monoid: Sum,
+        foldable: [Sum.empty()],
+        expectedResult: Sum.empty(),
+      }, {
+        monoid: Sum,
+        foldable: [2, Sum.empty()],
+        expectedResult: 2,
+      }, {
+        monoid: Sum,
+        foldable: [0, Sum.empty()],
+        expectedResult: 0,
+      }, {
+        monoid: Sum,
+        foldable: [1, 12, 3],
+        expectedResult: 16,
+      }]
+      testCases.forEach(doTestCase)
     })
   })
 })
