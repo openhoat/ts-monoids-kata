@@ -121,6 +121,41 @@ describe('Monoid tests', () => {
       testCases.forEach(doTestCase)
     })
   })
+  describe('foldMap', () => {
+    describe('isWinnerTicket', () => {
+      type TicketDigit = 1 | 2 | 3 | 4 | 5
+      type Ticket = TicketDigit[]
+      type TestCase = {
+        tickets: Ticket[]
+        expectedResult: boolean
+      }
+      const testCases: TestCase[] = [{
+        tickets: [
+          [1, 2, 5, 3, 4, 2, 2, 2],
+          [5, 5, 5, 5, 5, 5, 5, 1],
+          [5, 5, 5, 5, 5, 5, 5, 3],
+        ],
+        expectedResult: false,
+      }, {
+        tickets: [
+          [5, 5, 5, 5, 5, 5, 5, 4],
+          [1, 3, 2, 4, 3, 4, 2, 5],
+        ],
+        expectedResult: true,
+      }]
+      const doTestCase = (
+        { tickets, expectedResult }: TestCase,
+      ) => {
+        it(`should return ${expectedResult} given ${JSON.stringify(tickets, null, 0)}`, () => {
+          // When
+          const resut = isWinner(tickets)
+          // Then
+          expect(resut).toEqual(expectedResult)
+        })
+      }
+      testCases.forEach(doTestCase)
+    })
+  })
 })
 
 run()
